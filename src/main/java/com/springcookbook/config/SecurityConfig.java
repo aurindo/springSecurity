@@ -6,7 +6,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -15,17 +14,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	public void configureUsers(AuthenticationManagerBuilder auth)
 			throws Exception {
-		auth.inMemoryAuthentication().withUser("user1").password("pwd")
-				.roles("USER").and().withUser("admin").password("admin_pwd")
-				.roles("USER", "ADMIN");
+		  auth.inMemoryAuthentication().withUser("user").password("user").roles("USER");
+		  auth.inMemoryAuthentication().withUser("admin").password("admin").roles("ADMIN");
+		  auth.inMemoryAuthentication().withUser("dba").password("dba").roles("DBA");
 	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().anyRequest().authenticated();
-		http.formLogin().loginPage("/login").permitAll();
-		AntPathRequestMatcher pathRequestMatcher = new AntPathRequestMatcher("/logout");
-		http.logout().logoutRequestMatcher(pathRequestMatcher);
+		  http.authorizeRequests()
+			.antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
+			.antMatchers("/dba/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_DBA')")
+			.and().formLogin();
 	}
 
 }

@@ -31,7 +31,7 @@ public class AppConfig extends WebMvcConfigurerAdapter{
 	public ViewResolver jspViewResolver(){
 	    InternalResourceViewResolver resolver = new InternalResourceViewResolver();
 	    resolver.setViewClass(JstlView.class);
-	    resolver.setPrefix("/WEB-INF/jsp/");
+	    resolver.setPrefix("/WEB-INF/pages/");
 	    resolver.setSuffix(".jsp");
 	    return resolver;
 	}
