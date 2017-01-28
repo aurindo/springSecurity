@@ -19,12 +19,12 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
-import com.springcookbook.interceptor.PerformanceInterceptor;
+import com.springcookbook.web.interceptor.PerformanceInterceptor;
 
 @Configuration
 @EnableWebMvc
 @EnableTransactionManagement
-@ComponentScan(basePackages = { "com.springcookbook.controller", "com.springcookbook.dao" })
+@ComponentScan(basePackages = { "com.springcookbook.web.controller", "com.springcookbook.dao" })
 public class AppConfig extends WebMvcConfigurerAdapter{
 	
 	@Bean

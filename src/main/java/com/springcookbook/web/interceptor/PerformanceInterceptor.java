@@ -1,4 +1,4 @@
-package com.springcookbook.interceptor;
+package com.springcookbook.web.interceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

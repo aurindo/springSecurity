@@ -4,7 +4,7 @@
 <%@ page isELIgnored="false" %>
 
 <c:url var="loginUrl" value="/login" />
-<form action="${loginUrl}" method="post">      
+<form action="${loginUrl}" method="POST">      
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
     <c:if test="${param.error != null}">       
@@ -22,7 +22,6 @@
         <label for="password">Password</label>
         <input type="password" id="password" name="password"/> 
     </p>
-
 
     <button type="submit">Log in</button>
 </form>
