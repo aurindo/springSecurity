@@ -1,4 +1,4 @@
-package com.springcookbook.controller;
+package com.springcookbook.web.controller;
 
 import java.util.List;
 
