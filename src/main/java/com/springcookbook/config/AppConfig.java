@@ -2,11 +2,15 @@ package com.springcookbook.config;
 
 import java.util.Locale;
 
+import javax.sql.DataSource;
+
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.LocaleResolver;
@@ -24,8 +28,23 @@ import com.springcookbook.web.interceptor.PerformanceInterceptor;
 @Configuration
 @EnableWebMvc
 @EnableTransactionManagement
-@ComponentScan(basePackages = { "com.springcookbook.web.controller", "com.springcookbook.dao" })
+@ComponentScan(basePackages = { 
+		"com.springcookbook.web.controller", 
+		"com.springcookbook.dao", 
+		"com.springcookbook.service" })
+@Import({ SecurityConfig.class })
 public class AppConfig extends WebMvcConfigurerAdapter{
+	
+	@Bean
+	public DataSource dataSource() {
+		DriverManagerDataSource dataSource = new DriverManagerDataSource();
+		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+		dataSource.setUrl("jdbc:mysql://localhost:3306/visit_card");
+		dataSource.setUsername("root");
+		dataSource.setPassword("root");
+
+		return dataSource;
+	}
 	
 	@Bean
 	public ViewResolver jspViewResolver(){

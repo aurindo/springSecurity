@@ -1,49 +1,34 @@
 package com.springcookbook.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-import org.hibernate.validator.constraints.NotEmpty;
-
-@Entity
-@Table(name = "user")
 public class User {
 
-	@Id
-	@GeneratedValue
-	private Long id;
+	private String username;
+	private String password;
+	private Boolean enable;
 
-	@NotEmpty
-	@Column(name = "first_name")
-	private String firstName;
-
-	private Integer age;
-
-	public Long getId() {
-		return id;
+	public User() {
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public User(String username, String password, Boolean enable) {
+		this.username = username;
+		this.password = password;
+		this.enable = enable;
 	}
 
-	public String getFirstName() {
-		return firstName;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+	public String getPassword() {
+		return password;
 	}
 
-	public Integer getAge() {
-		return age;
+	public Boolean getEnable() {
+		return enable;
 	}
 
-	public void setAge(Integer age) {
-		this.age = age;
+	public void setEnable(Boolean enable) {
+		this.enable = enable;
 	}
-
+	
 }
