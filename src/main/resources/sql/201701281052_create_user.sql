@@ -1,3 +1,6 @@
+CREATE database visit_card;
+USE visit_card;
+
 CREATE  TABLE users (
   id BIGINT(20) NOT NULL AUTO_INCREMENT,
   username VARCHAR(45) NOT NULL ,
