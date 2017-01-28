@@ -1,49 +1,52 @@
 package com.springcookbook.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import java.util.Set;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
-@Entity
-@Table(name = "user")
 public class User {
 
-	@Id
-	@GeneratedValue
 	private Long id;
+	private String username;
+	private String password;
+	private Boolean enable;
+	private Set<String> roles;
 
-	@NotEmpty
-	@Column(name = "first_name")
-	private String firstName;
+	public User() {}
 
-	private Integer age;
+	public User(Long id, String username, String password, Boolean enable) {
+		this.username = username;
+		this.password = password;
+		this.enable = enable;
+	}
+	
+	public User(Long id, String username, String password, Boolean enable, Set<String> roles) {
+		this.username = username;
+		this.password = password;
+		this.enable = enable;
+		this.roles = roles;
+	}
 
 	public Long getId() {
 		return id;
 	}
-
-	public void setId(Long id) {
-		this.id = id;
+	
+	public String getUsername() {
+		return username;
 	}
 
-	public String getFirstName() {
-		return firstName;
+	public String getPassword() {
+		return password;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+	public Set<String> getRoles() {
+		return roles;
 	}
 
-	public Integer getAge() {
-		return age;
+	public Boolean getEnable() {
+		return enable;
 	}
 
-	public void setAge(Integer age) {
-		this.age = age;
+	public void setEnable(Boolean enable) {
+		this.enable = enable;
 	}
-
+	
 }
