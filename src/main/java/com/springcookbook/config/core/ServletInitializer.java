@@ -1,6 +1,11 @@
-package com.springcookbook.config;
+package com.springcookbook.config.core;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+
+import com.springcookbook.config.AppConfig;
+import com.springcookbook.config.DatasourceConfig;
+import com.springcookbook.config.HibernateConfig;
+import com.springcookbook.config.SecurityConfig;
 
 public class ServletInitializer extends
 		AbstractAnnotationConfigDispatcherServletInitializer {

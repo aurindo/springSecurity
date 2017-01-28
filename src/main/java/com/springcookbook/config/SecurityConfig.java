@@ -1,31 +1,47 @@
 package com.springcookbook.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationTrustResolver;
+import org.springframework.security.authentication.AuthenticationTrustResolverImpl;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import com.springcookbook.config.security.SecurityContextAccessor;
+import com.springcookbook.config.security.SecurityContextAccessorImpl;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+	
+	@Bean
+	public AuthenticationTrustResolver authenticationTrustResolver() {
+		AuthenticationTrustResolver authenticationTrustResolver = new AuthenticationTrustResolverImpl();
+		return authenticationTrustResolver;
+	}
+	
+	@Bean
+	public SecurityContextAccessor securityContextAccessor() {
+		SecurityContextAccessor securityContextAccessor = new SecurityContextAccessorImpl();
+		return securityContextAccessor;
+	}
 
 	@Autowired
 	public void configureUsers(AuthenticationManagerBuilder auth)
 			throws Exception {
-		auth.inMemoryAuthentication().withUser("user1").password("pwd")
-				.roles("USER").and().withUser("admin").password("admin_pwd")
-				.roles("USER", "ADMIN");
+		  auth.inMemoryAuthentication().withUser("user").password("user").roles("USER");
+		  auth.inMemoryAuthentication().withUser("admin").password("admin").roles("ADMIN");
 	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().anyRequest().authenticated();
-		http.formLogin().loginPage("/login").permitAll();
-		AntPathRequestMatcher pathRequestMatcher = new AntPathRequestMatcher("/logout");
-		http.logout().logoutRequestMatcher(pathRequestMatcher);
+		  http.authorizeRequests()
+			.antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
+			.antMatchers("/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+			.and().formLogin().loginPage("/login").permitAll();
 	}
 
 }
