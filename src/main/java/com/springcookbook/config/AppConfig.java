@@ -10,6 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -31,7 +32,8 @@ import com.springcookbook.web.interceptor.PerformanceInterceptor;
 @ComponentScan(basePackages = { 
 		"com.springcookbook.web.controller", 
 		"com.springcookbook.dao", 
-		"com.springcookbook.service" })
+		"com.springcookbook.service",
+		"com.springcookbook.component"})
 @Import({ SecurityConfig.class })
 public class AppConfig extends WebMvcConfigurerAdapter{
 	
@@ -45,6 +47,13 @@ public class AppConfig extends WebMvcConfigurerAdapter{
 
 		return dataSource;
 	}
+	
+	@Bean
+    public JdbcTemplate jdbcTemplate() {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate();
+        jdbcTemplate.setDataSource(dataSource());
+        return jdbcTemplate;
+    }
 	
 	@Bean
 	public ViewResolver jspViewResolver(){
