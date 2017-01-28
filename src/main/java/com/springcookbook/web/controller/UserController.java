@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.springcookbook.dao.UserRepository;
+import com.springcookbook.dao.UserDAO;
 import com.springcookbook.model.User;
 
 @Controller
@@ -20,7 +20,7 @@ import com.springcookbook.model.User;
 public class UserController {
 
 	@Autowired
-	private UserRepository userRepository;
+	private UserDAO userDAO;
 
 	@ModelAttribute("user")
 	public User defaultUser() {
@@ -30,7 +30,7 @@ public class UserController {
 
 	@RequestMapping("/list")
 	public void userList(Model model) {
-		List<User> userSize = userRepository.findAll();
+		List<User> userSize = userDAO.findAll();
 		model.addAttribute("nbUsers", userSize.size());
 		System.out.println("Call the method userList()!");
 	}
@@ -49,7 +49,7 @@ public class UserController {
 			// show the form page again, with the errors
 			return "/user/add";
 		} else {
-			userRepository.add(user);
+			userDAO.add(user);
 			return "redirect:/user/list";
 		}
 
