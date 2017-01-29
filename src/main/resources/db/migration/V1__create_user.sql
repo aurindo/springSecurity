@@ -1,4 +1,3 @@
-CREATE database visit_card;
 USE visit_card;
 
 CREATE  TABLE users (
