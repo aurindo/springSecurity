@@ -4,9 +4,9 @@
 
 <html>
 <body>
-  <h1>Add User</h1>
+  <h1>User Edit</h1>
   
-  <form:form modelAttribute="user" action="./add">
+  <form:form modelAttribute="user" action="../edit">
   	<label for="username">Username</label>
 	<form:input id="username" path="username"/>
 	<form:errors path="username" cssclass="error"></form:errors>
@@ -25,12 +25,12 @@
 	<label for="roles">Roles</label>	
 	<form:select path="roles" items="${roles}" />
 	<br/>
-
+	
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-
-    <a href="./list">Cancel</a>
-    <button type="submit">Save</button>
-
+    <form:hidden  path="id" />
+    
+    <a href="../list">Cancel</a>
+    <input type="submit" value="Save"/>
   </form:form>
   
 </body>

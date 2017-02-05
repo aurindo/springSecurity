@@ -23,18 +23,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Bean
 	public AuthenticationTrustResolver authenticationTrustResolver() {
-		AuthenticationTrustResolver authenticationTrustResolver = new AuthenticationTrustResolverImpl();
+		AuthenticationTrustResolver authenticationTrustResolver = 
+				new AuthenticationTrustResolverImpl();
 		return authenticationTrustResolver;
 	}
 	
 	@Bean
 	public SecurityContextAccessor securityContextAccessor() {
-		SecurityContextAccessor securityContextAccessor = new SecurityContextAccessorImpl();
+		SecurityContextAccessor securityContextAccessor = 
+				new SecurityContextAccessorImpl();
 		return securityContextAccessor;
 	}
 	
 	@Autowired
-	public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
+	public void configAuthentication(AuthenticationManagerBuilder auth) 
+			throws Exception {
 		auth.authenticationProvider(customAuthenticationProvider);
 	}
 
