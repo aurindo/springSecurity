@@ -5,10 +5,12 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import com.springcookbook.exception.ObjectNotFoundException;
 import com.springcookbook.model.User;
 
 @Repository
@@ -18,15 +20,20 @@ public class UserDAOImpl implements UserDAO {
 	private JdbcTemplate jdbcTemplate;
 
 	@Override
-	public User findByUserName(String username) {
-		String query = 
-				"SELECT * "
-				+ "FROM "
-				+ 	"users AS users "
-				+ "WHERE "
-				+ 	"users.username=?";
-		User user = jdbcTemplate.queryForObject(query, new Object[] {username},
-				new UserMapper());
+	public User findByUserName(String username) throws ObjectNotFoundException {
+		User user = null;
+		try {
+			String query = 
+					"SELECT * "
+					+ "FROM "
+					+ 	"users AS users "
+					+ "WHERE "
+					+ 	"users.username=?";
+			user = jdbcTemplate.queryForObject(query, new Object[] {username},
+					new UserMapper());
+		} catch (Exception e) {
+			throw new ObjectNotFoundException("Objet not found.");
+		}
 		return user;
 	}
 
@@ -40,7 +47,7 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 	@Override
-	public User save(User user) {
+	public User save(User user) throws ObjectNotFoundException, DataAccessException {
 		String insert = "INSERT INTO USERS (username, password, enabled) "
 				+ "VALUE (?, ?, ?)";
 		jdbcTemplate.update(insert, new Object[] {

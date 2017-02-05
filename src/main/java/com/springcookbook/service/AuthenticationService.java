@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.springcookbook.dao.UserDAO;
 import com.springcookbook.dao.RoleDAO;
+import com.springcookbook.exception.ObjectNotFoundException;
 import com.springcookbook.model.User;
 
 @Service
@@ -24,18 +25,23 @@ public class AuthenticationService {
 	RoleDAO userRoleDAO;
 
 	public Authentication authentication(String name, String password) {
-        User user = userDAO.findByUserName(name);
-
-        Authentication auth = null;
-        
-        if (password.equals(user.getPassword())) {
-        	List<String> roles =
-        			userRoleDAO.findRolesByUser(user.getUsername());
-
-        	if (!roles.isEmpty()) {
-	            auth = loadAuthorities(name, password, roles);
-        	}
-        }
+		
+		Authentication auth = null;
+		
+		try {
+	        User user = userDAO.findByUserName(name);
+	        
+	        if (password.equals(user.getPassword())) {
+	        	List<String> roles =
+	        			userRoleDAO.findRolesByUser(user.getUsername());
+	
+	        	if (!roles.isEmpty()) {
+		            auth = loadAuthorities(name, password, roles);
+	        	}
+	        }
+		} catch (ObjectNotFoundException e) {
+			auth = null;
+		}
 
         return auth;
 	}
