@@ -17,39 +17,57 @@ public class UserDAOImpl implements UserDAO {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
+	@Override
 	public User findByUserName(String username) {
-		String sql = 
-				"select * "
-				+ "from "
-				+ 	"users as users "
-				+ "where "
+		String query = 
+				"SELECT * "
+				+ "FROM "
+				+ 	"users AS users "
+				+ "WHERE "
 				+ 	"users.username=?";
-		User user = jdbcTemplate.queryForObject(sql, new Object[] { username },
+		User user = jdbcTemplate.queryForObject(query, new Object[] { username },
 				new UserMapper());
 		return user;
 	}
 
-	public List<String> findRolesByUser(String username) {
-		String sql = 
-				"select roles.role "
-				+ "from "
-				+ 	"users, user_roles as roles "
-				+ "where "
-				+ 	"users.username=? "
-				+ 	"and roles.user_id = users.id";
-		List<String> strings = (List<String>) jdbcTemplate.queryForList(sql, new Object[] { username }, String.class);
-		return strings;
+	@Override
+	public List<User> findAll() {
+		String query = "SELECT * FROM USERS";
+		
+		List<User> userList = jdbcTemplate.query(
+				query, new UserMapper());
+		return userList;	
+	}
+
+	@Override
+	public User save(User user) {
+		String insert = "INSERT INTO USERS (username, password, enabled) "
+				+ "VALUE (?, ?, ?)";
+		jdbcTemplate.update(insert, new Object[] {
+				user.getUsername(), user.getPassword(), user.getEnable()});
+		
+		return this.findByUserName(user.getUsername());
 	}
 	
-	public List<User> findAll() {
-		//TODO: implements
-		return null;
+	@Override
+	public void delete(Long userId) {
+		String query = "DELETE FROM USERS WHERE ID = ?";
+		jdbcTemplate.update(query, new Object[] { userId });
 	}
 
-	public void add(User user) {
-		//TODO: implements
+	@Override
+	public User findById(Long id) {
+		String query = 
+				"SELECT * "
+				+ "FROM "
+				+ 	"users AS users "
+				+ "WHERE "
+				+ 	"users.id=?";
+		User user = jdbcTemplate.queryForObject(query, new Object[] { id },
+				new UserMapper());
+		return user;	
 	}
-
+	
 	private class UserMapper implements RowMapper<User> {
 		public User mapRow(ResultSet row, int rowNum) throws SQLException {
 			User user = new User(
@@ -57,9 +75,24 @@ public class UserDAOImpl implements UserDAO {
 				row.getString("username"),
 				row.getString("password"), 
 				row.getBoolean("enabled"));
-
 			return user;
 		}
+	}
+
+	@Override
+	public void update(User user) {
+		String query = 
+				"UPDATE USERS "
+				+ "SET "
+				+ 	"username = ?, password = ?, enabled = ? "
+				+ "WHERE "
+				+ 	"id = ?";
+		jdbcTemplate.update(query, 
+				new Object[] { 
+					user.getUsername(), 
+					user.getPassword(), 
+					user.getEnable(),
+					user.getId()});
 	}
 
 }

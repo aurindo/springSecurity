@@ -11,6 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import com.springcookbook.dao.UserDAO;
+import com.springcookbook.dao.RoleDAO;
 import com.springcookbook.model.User;
 
 @Service
@@ -18,23 +19,38 @@ public class AuthenticationService {
 	
 	@Autowired
 	UserDAO userDAO;
+	
+	@Autowired
+	RoleDAO userRoleDAO;
 
 	public Authentication authentication(String name, String password) {
         User user = userDAO.findByUserName(name);
 
+        Authentication auth = null;
+        
         if (password.equals(user.getPassword())) {
-        	List<String> roles = userDAO.findRolesByUser(user.getUsername());
+        	List<String> roles =
+        			userRoleDAO.findRolesByUser(user.getUsername());
 
-            List<GrantedAuthority> grantedAuths = new ArrayList<>();
-            roles.stream().forEach(role -> {
-            	grantedAuths.add(new SimpleGrantedAuthority(role));
-            });
-
-            Authentication auth = new UsernamePasswordAuthenticationToken(name, password, grantedAuths);
-            return auth;
-        } else {
-            return null;
+        	if (!roles.isEmpty()) {
+	            auth = loadAuthorities(name, password, roles);
+        	}
         }
+        
+        return auth;
+	}
+
+	private Authentication loadAuthorities(String name, String password,
+			List<String> roles) {
+		Authentication auth;
+		List<GrantedAuthority> grantedAuths = new ArrayList<>();
+		roles.stream().forEach(role -> {
+			grantedAuths.add(new SimpleGrantedAuthority(role));
+		});
+
+		auth = new UsernamePasswordAuthenticationToken(
+				name, password, grantedAuths);
+		return auth;
 	}
 
 }
