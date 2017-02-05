@@ -36,7 +36,7 @@ public class AuthenticationService {
 	            auth = loadAuthorities(name, password, roles);
         	}
         }
-        
+
         return auth;
 	}
 

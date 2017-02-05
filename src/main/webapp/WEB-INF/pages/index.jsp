@@ -4,20 +4,17 @@
 
 <html>
 <body>
-	<h1>WELCOME PAGE</h1>
-
-	<a href="<c:url value="/logout" />">Logout</a>
-
-	<p>
-		<spring:message code="add.title" />
-	</p>
-	<p>
-		<spring:message code="add.text" />
-	</p>
-
 	<p>
 		<a href="?lang=en">English</a> | <a href="?lang=pt">Portuguese</a>
 	</p>
+	<h1>WELCOME PAGE</h1>
+
+	<a href="<c:url value="/user/list" />">Users page</a>
+	<br/>
+	<a href="<c:url value="/admin" />">Admin page</a>
+	<br/>
+	<br/>
+	<a href="<c:url value="/logout" />">Logout</a>
 
 </body>
 </html>

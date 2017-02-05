@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.springcookbook.dao.RoleDAO;
 import com.springcookbook.dao.UserDAO;
@@ -11,6 +13,7 @@ import com.springcookbook.model.Role;
 import com.springcookbook.model.User;
 
 @Service
+@Transactional(propagation=Propagation.SUPPORTS, readOnly=true)
 public class UserService {
 
 	@Autowired
@@ -32,12 +35,16 @@ public class UserService {
 		return userList;
 	}
 	
-	public void addUser(User user) {
-		user = userDAO.save(user);
+	@Transactional(propagation=Propagation.REQUIRED, readOnly=false, rollbackFor=Exception.class)
+	public void addUser(User user) throws Exception {
+		user.setId(userDAO.save(user).getId());
 		saveRoles(user);
 	}
 	
+	@Transactional(propagation=Propagation.REQUIRED, readOnly=false, rollbackFor=Exception.class)
 	public void delete(Long userId) {
+		User user = userDAO.findById(userId);
+		roleDAO.removeAllRolesByUSer(user);
 		userDAO.delete(userId);
 	}
 	
@@ -47,7 +54,8 @@ public class UserService {
 		return user;
 	}
 
-	public void editUser(User user) {
+	@Transactional(propagation=Propagation.REQUIRED, readOnly=false, rollbackFor=Exception.class)
+	public void editUser(User user) throws Exception {
 		User userDB = userDAO.findById(user.getId());
 		userDB.setEnable(user.getEnable());
 		userDB.setPassword(user.getPassword());
@@ -62,7 +70,11 @@ public class UserService {
 		return user;
 	}
 	
-	private void saveRoles(User user) {
+	private void saveRoles(User user) throws Exception {
+		
+		if (user.getRoles() == null || user.getRoles().isEmpty()) {
+			throw new Exception("Role is required!");
+		}
 		List<String> rolesStr = user.getRoles();
 
 		roleDAO.removeAllRolesByUSer(user);

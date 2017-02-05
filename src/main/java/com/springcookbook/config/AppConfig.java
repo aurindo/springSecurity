@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -56,6 +57,13 @@ public class AppConfig extends WebMvcConfigurerAdapter{
     }
 	
 	@Bean
+	public DataSourceTransactionManager transactionManager() {
+	    DataSourceTransactionManager transactionManager = new DataSourceTransactionManager();
+	  transactionManager.setDataSource(dataSource());
+	  return transactionManager;
+	}
+	
+	@Bean
 	public ViewResolver jspViewResolver(){
 	    InternalResourceViewResolver resolver = new InternalResourceViewResolver();
 	    resolver.setViewClass(JstlView.class);
@@ -75,14 +83,16 @@ public class AppConfig extends WebMvcConfigurerAdapter{
 	
 	@Bean
 	public HandlerInterceptor localeChangeInterceptor() {
-		LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
+		LocaleChangeInterceptor localeChangeInterceptor = 
+				new LocaleChangeInterceptor();
 		localeChangeInterceptor.setParamName("lang");
 		return localeChangeInterceptor;
 	}
 	
 	@Bean
 	public HandlerInterceptor performaInterceptor() {
-		PerformanceInterceptor performanceInterceptor = new PerformanceInterceptor();
+		PerformanceInterceptor performanceInterceptor = 
+				new PerformanceInterceptor();
 		return performanceInterceptor;
 	}
 	
@@ -96,7 +106,8 @@ public class AppConfig extends WebMvcConfigurerAdapter{
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(localeChangeInterceptor());
-		registry.addInterceptor(performaInterceptor()).addPathPatterns("/user/list");
+		registry.addInterceptor(performaInterceptor()).addPathPatterns(
+				"/user/list");
 	}
 	
 }

@@ -72,7 +72,7 @@ public class UserController {
 	
 	@RequestMapping(value = "add", method = RequestMethod.POST)
 	public String addUser(@ModelAttribute("user") @Valid User user,
-			BindingResult bindingResult) {
+			BindingResult bindingResult) throws Exception {
 
 		if (bindingResult.hasErrors()) {
 			return "/user/add";
@@ -85,7 +85,7 @@ public class UserController {
 	
 	@RequestMapping(value = "edit", method = RequestMethod.POST)
 	public String editUser(@ModelAttribute("user") @Valid User user,
-			BindingResult bindingResult) {
+			BindingResult bindingResult) throws Exception {
 
 		if (bindingResult.hasErrors()) {
 			return "/user/edit/" + user.getId();

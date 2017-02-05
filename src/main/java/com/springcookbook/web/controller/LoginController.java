@@ -45,8 +45,10 @@ public class LoginController {
 	}
 
 	@RequestMapping(value="/logout", method = RequestMethod.GET)
-	public String logoutPage (HttpServletRequest request, HttpServletResponse response) {
-	    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	public String logoutPage (HttpServletRequest request, 
+			HttpServletResponse response) {
+	    Authentication auth = 
+	    		SecurityContextHolder.getContext().getAuthentication();
 	    if (auth != null){    
 	        new SecurityContextLogoutHandler().logout(request, response, auth);
 	    }
@@ -58,10 +60,10 @@ public class LoginController {
 
 	  ModelAndView model = new ModelAndView();
 
-	  Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	  Authentication auth = 
+			  SecurityContextHolder.getContext().getAuthentication();
 	  if (!(auth instanceof AnonymousAuthenticationToken)) {
-		UserDetails userDetail = (UserDetails) auth.getPrincipal();
-		model.addObject("username", userDetail.getUsername());
+		model.addObject("username", (String)auth.getPrincipal());
 	  }
 
 	  model.setViewName("403");

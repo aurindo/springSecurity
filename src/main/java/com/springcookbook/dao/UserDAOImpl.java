@@ -25,7 +25,7 @@ public class UserDAOImpl implements UserDAO {
 				+ 	"users AS users "
 				+ "WHERE "
 				+ 	"users.username=?";
-		User user = jdbcTemplate.queryForObject(query, new Object[] { username },
+		User user = jdbcTemplate.queryForObject(query, new Object[] {username},
 				new UserMapper());
 		return user;
 	}

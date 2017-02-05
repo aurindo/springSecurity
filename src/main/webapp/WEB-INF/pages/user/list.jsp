@@ -26,6 +26,9 @@
 
    <br/>  
    <a href="add">Add New User</a>
+   <br/>
+   <a href="<c:url value="/index" />">Home</a>
+   
 
 </body>
 </html>
