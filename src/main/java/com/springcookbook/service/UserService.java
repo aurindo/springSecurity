@@ -75,7 +75,6 @@ public class UserService {
 		if (user.getRoles() == null || user.getRoles().isEmpty()) {
 			throw new Exception("Role is required!");
 		}
-		List<String> rolesStr = user.getRoles();
 
 		roleDAO.removeAllRolesByUSer(user);
 		List<Role> roles = roleDAO.findAllRoles();
@@ -86,7 +85,13 @@ public class UserService {
 		});
 		
 	}
-	
-	
+
+	public void setUserDAO(UserDAO userDAO) {
+		this.userDAO = userDAO;
+	}
+
+	public void setRoleDAO(RoleDAO roleDAO) {
+		this.roleDAO = roleDAO;
+	}
 	
 }
