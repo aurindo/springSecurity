@@ -50,7 +50,9 @@ public class UserService {
 	
 	public User findUserById(Long id) {
 		User user = userDAO.findById(id);
-		user = loadRoles(user); 
+		if (user != null) {
+			user = loadRoles(user);
+		}
 		return user;
 	}
 
