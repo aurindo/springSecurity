@@ -1,3 +1,7 @@
+# Spring Security Study
+
+[![Build Status](https://travis-ci.org/aurindo/springSecurity.svg?branch=master)](https://travis-ci.org/aurindo/springSecurity)
+
 ### What is it?
 
 This is a scaffolding for futures Spring projects and related studies.
